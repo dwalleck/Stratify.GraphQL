@@ -1,0 +1,79 @@
+The source emphasizes a philosophy of simplicity and practicality in software development, advocating for the minimal viable solution over unnecessary complexity. The speaker, drawing on decades of experience, critiques modern trends like microservices, complex frontend frameworks, and elaborate infrastructure setups (such as Kubernetes), arguing that they often introduce overhead without commensurate benefit, especially for most projects. Instead, the text champions clean, well-designed monoliths, server-side rendered HTML, straightforward APIs (like JSON over HTTP), and simple data storage solutions (such as basic SQL or even text files), asserting that these approaches are more robust, cost-effective, and easier to maintain. The overall message encourages developers to question assumptions, prioritize clarity, and only adopt complex solutions when genuinely necessary to address specific, demonstrated problems rather than for the sake of resume building or following trends.
+
+Briefing Document: "How Simple Is 'As Simple As Possible'?" - A Call for Simplicity in Software Development
+
+Source: Excerpts from "How Simple Is 'As Simple As Possible'?" - Rendle - NDC Porto 2024
+
+Date: [Assuming current date for briefing creation]
+
+Author: [Rendle, referred to as "I" or "me" in the excerpts]
+
+Purpose: This briefing document summarizes the core arguments, key themes, and most important insights from Rendle's NDC Porto 2024 talk, "How Simple Is 'As Simple As Possible'?" The presentation is a passionate and often humorous critique of modern software development trends, advocating for a return to simpler, more pragmatic approaches.
+I. Overarching Theme: The Unnecessary Complication of Modern Software Development
+
+Rendle's central thesis is that the software industry has progressively moved away from simple, effective solutions towards overly complex ones, often driven by hype, buzzwords, or the desire to add impressive-sounding technologies to one's resume. He challenges the audience to consider "How simple is as simple as possible?" and argues that "it's a lot simpler than all the stuff that we're doing at the moment."
+
+His perspective is rooted in decades of experience, beginning in 1990 with systems built on "Informix ESQL/C" and "Informix 4GL" for Unix/Xenix boxes with limited resources (e.g., "Tandon 286 I think it had 4 megabytes of RAM and something like 100 megabytes of hard disk"). These early experiences highlight that complex, functional systems were built with vastly simpler tooling and infrastructure, implying that much of today's complexity is gratuitous.
+II. Key Areas of Critique and Proposed Simple Solutions
+
+Rendle systematically critiques various aspects of modern software development, consistently advocating for the "simplest solution."
+
+A. Design and Architecture: From Monoliths to "Distributed Monoliths" and Back to Modular Monoliths
+
+    Historical Context: Early systems were "necessarily a monolith," due to hardware constraints. Even these monoliths (like mainframes) could be internally complex. These monolithic applications "worked," and "we made software that people used and they did their job and then they went home and they were happy."
+    The Microservices Delusion: The industry swung wildly towards microservices, often without genuine need. Rendle asserts, "microservices they're fantastic if you have the problem that microservices solve and the problem that microservices solve or the problems that they solve is thousands of developers and working in Desperate places and on entirely different bits of the system."
+    Crucial Threshold: "If you've got a 100 programmers you don't need to be doing microservices if you got less than 100 programmers and you're doing microservices and you're still doing it in a year I will literally find out where you live and I will come around and I will kick you really hard in The Shins."
+    The "Broken Monolith": Many attempts at microservices result in "distributed monoliths" – a single, tightly coupled system broken into multiple deployment units, which is "not a microservices architecture you've just broken a monolith in the same way as I would break a plate by dropping it on the floor and then going haha micro Crockery."
+    The Modular Monolith (The "Simple" Return): The current sensible approach, according to Rendle, is the "modular monolith." This is effectively a return to well-architected monolithic applications: "what modular monolith means is that thing we were doing that worked but the code was rubbish do that again but with better code." This approach allows for future breakdown if genuine scaling issues arise in specific modules ("if you have a part of your system that is experiencing weird scaling issues... then you can Hive that bid off really easily").
+    Emergent Design: Rather than upfront, over-engineered design (e.g., "DDD and event sourcing" for a simple "web bug a tracking pixel" that "didn't work" and was replaced with "100 lines of JavaScript"), Rendle advocates for emergent design: "just build the software... figure out the simplest easiest bit of it that you can do and then do it and then do the next bit and then architecture and design will emerge along the way."
+
+B. APIs: From SOAP to JSON over HTTP (and when to go further)
+
+    SOAP: Described as having "10 to 15% of the characters on that screen are data and the rest of it is soap," highlighting its verbosity.
+    JSON over HTTP: A significant improvement due to a "much less... ratio of data to craft." This is the recommended default: "Jason's quite nice let's let's just make apis where we send Jason over HTTP."
+    REST/HATEOAS Critique: Rendle dismisses the purist interpretation of REST (Hypermedia as the Engine of Application State, or HATEOAS) as impractical for machine clients. He argues, "the reason that rest works for the internet is that it's going through our brain and we are able to adapt a new information very very quickly and easily." For APIs, "you can't write an application that responds to that." He concludes, "I think we've all agreed now that rest is just Jason over HTTP."
+    OpenAPI and gRPC:OpenAPI (Swagger): While having "many faults," it allows for machine-readable system descriptions and client generation, which "you cannot do with a restful system because the URLs are multi-changing and dynamic."
+    gRPC: Recommended for "a bit more performance" or "between services in an internal Network" due to protobuf's efficiency, smaller wire size, and generated clients.
+    The Spec First Approach: Crucially, Rendle argues against generating OpenAPI specs from code. Instead, "hand write your open API spec." This ensures the spec is a "contract" that "can be checked" and used to "validate that your application does what your application is supposed to do." Generating from code means "if the code is broken all you have is a Json or yaml file that accurately tells you that your code is broken."
+
+C. Front-ends: The JavaScript Framework Overload
+
+    The "Simple" Past: Web development "used to be so simple" with server-side rendering where the server "would pull the data and then wrap a few XML is tags around it and send it back down to your browser and it would display a lovely web page."
+    The SPA (Single Page Application) Problem: SPAs, driven by "the idea that the page refreshed and so if you scrolled like a little bit down the page and it refreshed then you'd be back up at the top of the page," led to massive complexity.
+    Framework Bloat: Frameworks like Angular, React, and Vue are criticized for their enormous dependencies (an "empty application" using React Redux pulling in "604 packages" totaling "140 megabytes") and the performance overhead. "Can you honestly say that in order to display let's say the login page of your single page application that the browser has to download less than 8.45 megabytes?" (referencing the size of the entire Quake game).
+    Reinventions: The ironic trend of SPAs "invented service side rendering – that's what we were doing and it was fine." This often comes with the caveat of needing a JavaScript backend.
+    The Simple Solution: Server-Side Rendering + Minimal JavaScript: Rendle strongly advocates for a return to server-side rendered HTML (e.g., ASP.NET Core MVC/Razor Pages, Java Server Pages, Python Django). For interactivity, "if you need a little bit of interactivity on your web page write a little bit of JavaScript." He champions tools like HTMX, which "lets you do that do a round trip to the server just get a fragment of HTML back and update the Dom somewhere with essentially just attributes on your HTML."
+    The JavaScript Addiction: The problem is often not technical need but market pressure: "job adverts say react necessary." His radical solution: "stop using fucking JavaScript just stop."
+
+D. Infrastructure: Kubernetes, Serverless, and the Power of Containers
+
+    Past Complexity: Infrastructure used to be about physical hardware orders and long lead times.
+    Modern Over-Complication:Kubernetes: "Who's using kubernetes? Keep your hand up if you actually need to be using kubernetes? So why are you use it?" The vast majority do not need it, yet incur significant costs and management overhead ("you are still managing if you're using kubernetes you are managing kubernetes").
+    Serverless (Lambda/Functions): While appealing in concept, it often involves "wrapped that function in all the attributes and the project type and the compilation and build deployment process" and "vendor locking" due to specific SDKs.
+    The Simple Solution: Plain Containers: "Docker and the whole idea of containers the open container initiative this idea of a immutable file system that's layered on top of the one underneath and can't change that all really really good ideas containers are absolutely brilliant." Platforms like "Azure Container Apps" offer a simpler, cheaper alternative to Kubernetes for most, allowing users to "just go here's a container image... just run it when a request comes in and then shut it down." He provides a real-world example of a performant website running on a "Raspberry Pi in my house" via a simple k0s Kubernetes cluster for auto-updates, proving that complex infrastructure is not always necessary for performance or robustness.
+
+E. External Services: Choosing the Right Tool (Often a Relational Database)
+
+    Cosmos DB (and similar multi-model databases): Criticized for being a "Marvel of engineering" but often misused and leading to exorbitant costs ("£45,000 a month in uat"). A common anti-pattern is storing large, unindexed blobs of data where simple blob storage would suffice, saving immense amounts of money.
+    The Power of Simple SQL: "Quite a lot of the time all you need is a SQL database simple SQL database" (PostgreSQL, SQL Server, MySQL).
+    SQLite and Text Files: For even simpler needs, SQLite is powerful, and for ephemeral, user-specific data, "you could just call json.serialized to a text file" because "I don't need to introduce more complexity into my project to achieve this I can just text files."
+
+F. Processes: The Over-Engineered Agile Fallacy
+
+    Waterfall: While rigid, it offered predictability ("I've planned the whole year out aren't I clever").
+    Extreme Programming (XP): Conceived by "some of the best Engineers who have ever engineered," who "could because they were awesome." The problem: "the world does not have a sufficiently large supply of awesome people that you your company is able to staff your Development Department entirely with awesome people."
+    Scrum Critique: Rendle views Scrum as an over-engineered response to the inability of "Steve" (the average developer) to do XP. He satirizes its rituals: "full day of meetings to groom the backlog," "Sprint kickoff meeting," "points don't have any relation to how long it's going to take," "daily standup sitting down over teams from our houses and so nobody cares that it lasts an hour and a half."
+    The Simple Process: Kanban (Simplified): "Here's all the things we have to do I am currently doing this one Here's all the things we've done and you can just kind of decide between you as you go which which what's the most important thing that I can do next." He advocates for stopping the pretense of estimation ("Engineers can tell you how long it would take you to build a skyscraper we can't tell you how long it will take to build a login screen just stop pretending that we can").
+
+III. Core Philosophy and Calls to Action
+
+    "Keep It Simple, Stupid" (KISS): This maxim underpins the entire talk. The "it" is "literally everything" – design, architecture, APIs, front-ends, infrastructure, and processes.
+    Pragmatism over Dogma: Build what works. "You don't need all that stuff you just need to be good at what it is that you do."
+    Minimum Viable Complexity: "Do the minimum possible to make something work use the smallest possible number of components and moving parts and you will build something that is robust and reliable doesn't break and that you can come back to in six months and go oh I see what we did and fix it."
+    Embrace Evolution, Not Upfront Design: "If you need to add complexity if you need to break something out of your clean code monolith and rip it into another microservice you you do that when it's necessary as it becomes necessary as you start to face the problems that those Solutions were intended for."
+    Challenge the Status Quo: Rendle encourages attendees to question the adoption of complex technologies unless a clear, genuine need exists. He advises a "Monty Python sketch" style of immediate contradiction for anyone suggesting overly complex solutions ("Is this the right room for an argument? I told you once that just immediately contradict anything the person who wants the thing is saying").
+    CV-Driven Development is a Problem: A significant driver of complexity is the desire to add buzzwords to resumes. Rendle humorously suggests, "you should be doing is lying on your CV saying you know react if they give you an interview learn enough reactor to get through the interview and then on your first day I want you to walk in there with an axe that has clearly already been used and say right let's get rid of react."
+
+Conclusion:
+
+Rendle's briefing is a refreshing and candid appeal for simplicity in software development. He argues that much of the industry's self-imposed complexity is unnecessary, costly, and ultimately detrimental to productivity and maintainability. By demonstrating that robust, performant systems can be built with far simpler tools and processes, he empowers developers to question conventional wisdom and prioritize pragmatic, "as simple as possible" solutions.
